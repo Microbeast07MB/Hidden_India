@@ -65,7 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
       bestTime: '6 AM – 9 AM',
       timeNeeded: '60 – 90 mins',
       budget: '₹0 – ₹100',
-      location: 'Nerul Lake, Navi Mumbai'
+      location: 'Nerul Lake, Navi Mumbai',
+      mapQuery: 'Nerul Lake, Navi Mumbai',
+      creator: { name: 'Backpack Nihal', url: 'https://www.youtube.com/watch?v=YyDQZ4Y-ZY0', videoId: 'YyDQZ4Y-ZY0', title: 'Flamingo Point' }
     },
     {
       id: 102,
@@ -84,7 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
       bestTime: '5:30 AM – 8:30 AM',
       timeNeeded: '2 – 3 hrs',
       budget: '₹0',
-      location: 'Kharghar, Navi Mumbai'
+      location: 'Kharghar, Navi Mumbai',
+      mapQuery: 'Kharghar Hills, Navi Mumbai',
+      creator: { name: 'The Prash Diaries', url: 'https://www.youtube.com/watch?v=5UQd0VRB-Zw', videoId: '5UQd0VRB-Zw', title: 'Kharghar Hills' }
     },
     {
       id: 103,
@@ -103,7 +107,9 @@ document.addEventListener('DOMContentLoaded', () => {
       bestTime: '4 PM – 6:30 PM',
       timeNeeded: '1 – 2 hrs',
       budget: '₹0',
-      location: 'CBD Belapur, Navi Mumbai'
+      location: 'CBD Belapur, Navi Mumbai',
+      mapQuery: 'Belapur Fort, Navi Mumbai',
+      creator: { name: 'Vishal Sawant', url: 'https://www.youtube.com/watch?v=kfeXPVGtHVg', videoId: 'kfeXPVGtHVg', title: 'Belapur Fort' }
     },
     {
       id: 104,
@@ -122,7 +128,9 @@ document.addEventListener('DOMContentLoaded', () => {
       bestTime: 'Monsoon Morning',
       timeNeeded: '3 – 4 hrs',
       budget: '₹100 – ₹300',
-      location: 'Shirvane, Navi Mumbai'
+      location: 'Shirvane, Navi Mumbai',
+      mapQuery: 'Shirvane Waterfall, Navi Mumbai',
+      creator: { name: 'Harshit Singh', url: 'https://www.youtube.com/watch?v=-K-92NGg2PQ', videoId: '-K-92NGg2PQ', title: 'Shirvane Waterfall' }
     }
   ];
 
@@ -325,6 +333,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const gem = gems.find(g => g.id === id);
     if (!gem) return;
 
+    const mapEmbed = document.querySelector('.map-embed');
+    if (mapEmbed && gem.mapQuery) {
+      mapEmbed.src = `https://www.google.com/maps?q=${encodeURIComponent(gem.mapQuery)}&z=14&output=embed`;
+      mapEmbed.title = `Map showing ${gem.location}`;
+    }
+
     // Update active pin marker
     document.querySelectorAll('.gem-marker').forEach(m => m.classList.remove('active'));
     const targetMarker = document.querySelector(`.gem-marker[data-id="${id}"]`);
@@ -335,6 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (detailRail) {
       const isSaved = savedIds.includes(gem.id);
       const isTrip = tripIds.includes(gem.id);
+      const creatorTag = gem.creator ? `<a class="creator-tag" href="${gem.creator.url}" target="_blank" rel="noopener" aria-label="Watch ${gem.name} explored by ${gem.creator.name} on YouTube"><span class="creator-play">▶</span> Explored by ${gem.creator.name}<span class="creator-tooltip"><b>${gem.creator.name}</b><small>See this place through a traveler's experience.</small><em>▶ Watch on YouTube</em></span></a>` : '';
 
       detailRail.innerHTML = `
         <div class="selected-image">
@@ -354,6 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span>${gem.type}</span>
             ${gem.tags.map(t => `<span>${t}</span>`).join('')}
           </div>
+          ${creatorTag}
           <div class="why">
             <strong>✦ Why we recommend this?</strong>
             <p>${gem.blurb}</p>
@@ -365,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span>₹<b>${gem.budget}</b><small>Budget</small></span>
           </div>
           <div class="detail-actions">
-            <button class="discover-button" onclick="showToast('Opening full guide for ${gem.name}')">Explore Details</button>
+            <button class="discover-button" onclick="window.openCreatorDetails(${gem.id})">Explore Details</button>
             <button class="add-button" onclick="window.toggleTrip(${gem.id}, '${gem.name}')">
               ${isTrip ? '✓ Added' : '+ Add to Trip'}
             </button>
@@ -373,6 +389,22 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
     }
+  };
+
+  window.openCreatorDetails = function(id) {
+    const gem = gems.find(item => item.id === id);
+    if (!gem) return;
+    let root = document.getElementById('creator-detail-backdrop');
+    if (!root) {
+      root = document.createElement('div');
+      root.id = 'creator-detail-backdrop';
+      root.className = 'modal-backdrop creator-detail-backdrop';
+      root.addEventListener('click', event => { if (event.target === root) root.classList.remove('active'); });
+      document.body.appendChild(root);
+    }
+    const creator = gem.creator;
+    root.innerHTML = `<section class="creator-detail" role="dialog" aria-modal="true" aria-label="${gem.name} details"><button class="modal-close" onclick="document.getElementById('creator-detail-backdrop').classList.remove('active')" aria-label="Close">×</button><img src="${gem.image}" alt="${gem.name}"><div class="creator-detail-content"><p class="eyebrow">${gem.type} · ${gem.distance} from you</p><h2>${gem.name}</h2><p>${gem.blurb}</p>${creator ? `<section class="video-preview"><p class="eyebrow">🎥 See It Before You Go</p><h3>Explore this place through a local traveler's experience.</h3><a href="${creator.url}" target="_blank" rel="noopener" class="video-thumb"><img src="https://img.youtube.com/vi/${creator.videoId}/hqdefault.jpg" alt="${creator.title} video preview"><span>▶</span></a><div><b>${creator.title}</b><small>Explored by ${creator.name}</small></div><a class="discover-button video-cta" href="${creator.url}" target="_blank" rel="noopener">▶ Watch on YouTube</a></section><section class="creator-discovery"><h3>Real people. Real experiences.</h3><p>See how other travelers experienced this hidden place before you visit.</p><div class="creator-profile"><img src="https://img.youtube.com/vi/${creator.videoId}/default.jpg" alt="${creator.name}"><span><b>${creator.name}</b><small>${gem.name}</small></span><a href="${creator.url}" target="_blank" rel="noopener">▶ Watch</a></div></section>` : ''}</div></section>`;
+    root.classList.add('active');
   };
 
   // Choice grid selectors (Radius, Time, Budget)
