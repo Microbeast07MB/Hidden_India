@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
       score: 91,
       x: '18%',
       y: '38%',
-      image: 'https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=900&q=85',
+      image: 'public/images/flamingo-watch-point.png',
       tags: ['Bird Watching', 'Photography'],
       blurb: 'A peaceful bird watching spot with flamingos in season. Less crowded and perfect for nature lovers.',
       crowd: 'Low',
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
       score: 89,
       x: '36%',
       y: '18%',
-      image: 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85',
+      image: 'public/images/kharghar-hills.png',
       tags: ['Hiking', 'Views'],
       blurb: 'A green escape above the city with quiet trails and wide-open views.',
       crowd: 'Low',
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
       score: 86,
       x: '58%',
       y: '26%',
-      image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=900&q=85',
+      image: 'public/images/belapur-fort.png',
       tags: ['Heritage', 'History'],
       blurb: 'A compact historic fort where layers of the old port city meet the modern skyline.',
       crowd: 'Low',
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
       score: 84,
       x: '61%',
       y: '70%',
-      image: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=900&q=85',
+      image: 'public/images/shirvane-waterfall.png',
       tags: ['Waterfall', 'Adventure'],
       blurb: 'A cool monsoon trail ending at a tucked-away cascade.',
       crowd: 'Low',
@@ -476,4 +476,3 @@ document.addEventListener('DOMContentLoaded', () => {
   updateSavedCounters();
   renderPlaces();
 });
-
