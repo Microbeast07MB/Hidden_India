@@ -388,6 +388,64 @@ document.addEventListener('DOMContentLoaded', () => {
   window.toggleSave = toggleSave;
   window.toggleTrip = toggleTrip;
 
+  // Surprise Me: a lightweight, local-first experience planner.
+  const surprisePlans = [
+    { id: 101, name: 'Flamingo Watch Point', image: 'public/images/flamingo-watch-point.png', distance: '7.8 km', travel: '18 min', score: 92, tags: ['Nature', 'Birdwatching', 'Photography', 'Low Crowds'], route: [['09:00', '📍 Start from D.Y. Patil University', ''], ['09:20', '🌿 D.Y. Patil Botanical Garden', 'Explore local plant life.'], ['10:15', '🦩 Flamingo Watch Point', 'Birdwatching and photography.'], ['11:30', '🌊 Diwale Jetty', 'Waterfront and fishing culture.'], ['12:30', '🍜 Local Food Stop', 'Try a local favourite.']] },
+    { id: 103, name: 'Belapur Fort', image: 'public/images/belapur-fort.png', distance: '12 km', travel: '26 min', score: 89, tags: ['Heritage', 'Culture', 'Photography', 'Quiet'], route: [['10:00', '📍 Start from D.Y. Patil University', ''], ['10:30', '🏛 Belapur Fort', 'Walk through the mossy stone ruins.'], ['11:40', '🎭 Old Belapur Stories', 'Find the small details most visitors miss.'], ['12:30', '🍜 Local Food Stop', 'A quick regional lunch.']] },
+    { id: 104, name: 'Shirvane Waterfall', image: 'public/images/shirvane-waterfall.png', distance: '22 km', travel: '38 min', score: 87, tags: ['Adventure', 'Nature', 'Photography', 'Monsoon'], route: [['08:30', '📍 Start from D.Y. Patil University', ''], ['09:10', '🥾 Shirvane Trailhead', 'A short green approach trail.'], ['10:00', '💧 Shirvane Waterfall', 'Slow down by the cascade.'], ['11:30', '🍵 Chai Stop', 'A local reset before heading back.']] }
+  ];
+  let surprisePlanIndex = 0;
+
+  function surpriseRoot() {
+    let root = document.getElementById('surprise-modal-backdrop');
+    if (!root) {
+      root = document.createElement('div');
+      root.id = 'surprise-modal-backdrop';
+      root.className = 'modal-backdrop surprise-backdrop';
+      root.addEventListener('click', event => { if (event.target === root) window.closeSurpriseMe(); });
+      document.body.appendChild(root);
+    }
+    return root;
+  }
+
+  window.closeSurpriseMe = function() { surpriseRoot().classList.remove('active'); };
+  window.openSurpriseMe = function() {
+    const root = surpriseRoot();
+    root.innerHTML = `<section class="surprise-modal" role="dialog" aria-modal="true" aria-label="Surprise Me planner">
+      <button class="modal-close" onclick="closeSurpriseMe()" aria-label="Close">×</button>
+      <p class="eyebrow">📍 Near D.Y. Patil University, Nerul</p><h2>✦ Surprise Me</h2>
+      <p>Let's find something you didn't know was nearby.</p>
+      <div class="surprise-group"><b>How much time do you have?</b><div class="surprise-options" data-choice="time"><button class="selected">4 Hours</button><button>1 Hour</button><button>2 Hours</button><button>Half Day</button><button>Full Day</button></div></div>
+      <div class="surprise-group"><b>Budget</b><div class="surprise-options" data-choice="budget"><button class="selected">₹500</button><button>Free</button><button>₹1,000</button><button>₹1,500+</button></div></div>
+      <div class="surprise-group"><b>What sounds good?</b><div class="surprise-options chips" data-choice="interest"><button class="selected">🎲 Anything</button><button>🌿 Nature</button><button>🏛 Heritage</button><button>🍜 Food</button><button>🎨 Culture</button><button>📸 Photography</button><button>🥾 Adventure</button><button>🎭 Local Experiences</button></div></div>
+      <div class="surprise-group"><b>How far are you willing to go?</b><div class="surprise-options" data-choice="radius"><button>5 km</button><button class="selected">10 km</button><button>25 km</button><button>50 km</button><button>100 km</button></div></div>
+      <div class="surprise-group"><label for="surprise-wild"><b>How adventurous are you?</b> <span id="surprise-wild-label">Hidden Gem</span></label><input id="surprise-wild" type="range" min="1" max="4" value="3"><div class="surprise-range-labels"><span>Nearby Favorite</span><span>Wild Card</span></div></div>
+      <button class="surprise-button full" onclick="startSurpriseDiscovery()">✦ Surprise Me</button>
+    </section>`;
+    root.classList.add('active');
+    root.querySelectorAll('.surprise-options button').forEach(button => button.addEventListener('click', () => {
+      button.parentElement.querySelectorAll('button').forEach(item => item.classList.remove('selected'));
+      button.classList.add('selected');
+    }));
+    root.querySelector('#surprise-wild').addEventListener('input', event => { root.querySelector('#surprise-wild-label').textContent = ['Nearby Favorite', 'Slightly Hidden', 'Hidden Gem', 'True Wild Card'][event.target.value - 1]; });
+  };
+
+  window.startSurpriseDiscovery = function() {
+    const root = surpriseRoot();
+    root.innerHTML = `<section class="surprise-modal surprise-loading"><div class="surprise-orb">✦</div><h2>Finding something special near you...</h2><div class="discovery-steps"><span>Checking nearby destinations</span><span>Filtering mainstream attractions</span><span>Analyzing hidden potential</span><span>Finding local experiences</span><span>Matching your interests</span><span>Building your experience</span></div></section>`;
+    setTimeout(window.showSurpriseResult, 2400);
+  };
+
+  window.showSurpriseResult = function() {
+    const plan = surprisePlans[surprisePlanIndex % surprisePlans.length];
+    const route = plan.route.map(([time, title, detail]) => `<li><time>${time}</time><div><b>${title}</b>${detail ? `<small>${detail}</small>` : ''}</div></li>`).join('');
+    const root = surpriseRoot();
+    root.innerHTML = `<section class="surprise-modal surprise-result"><button class="modal-close" onclick="closeSurpriseMe()" aria-label="Close">×</button><p class="eyebrow">A Hidden India surprise</p><h2>We found something you might have missed.</h2><p>This isn't the usual tourist recommendation.</p><img src="${plan.image}" alt="${plan.name}"><div class="surprise-result-title"><div><h3>${plan.name}</h3><p>${plan.distance} from you · ${plan.travel}</p></div><strong>Hidden Score <em>${plan.score}/100</em></strong></div><div class="modal-tags">${plan.tags.map(tag => `<span>${tag}</span>`).join('')}</div><article class="why-card"><h3>Why we picked this for you</h3><p>You have time to explore, prefer a quieter experience, and this fits comfortably within your radius. It balances local character, high natural or cultural value, and low tourist saturation.</p>${[['Low Tourist Saturation', 96], ['Cultural / Natural Value', 91], ['Uniqueness', 89], ['Your Interest Match', 93]].map(([label, value]) => `<div class="metric"><span>${label}<b>${value}%</b></span><i><i style="width:${value}%"></i></i></div>`).join('')}</article><article class="experience-card"><h3>Your Surprise Experience</h3><ol class="surprise-timeline">${route}</ol><div class="experience-summary"><span>Total time <b>3h 30m</b></span><span>Budget <b>₹450</b></span><span>Distance <b>~28 km</b></span><span>Tourist saturation <b>Low</b></span></div></article><article class="missed-card"><b>You probably wouldn't have searched for this.</b><p>Google may know the place. Hidden India helps you discover why you should go there.</p></article><div class="surprise-actions"><button class="discover-button" onclick="showToast('Your surprise plan is ready!')">✦ This is my plan</button><button class="add-button" onclick="surpriseAgain()">↻ Surprise Me Again</button><button class="add-button" onclick="toggleTrip(${plan.id}, '${plan.name}')">＋ Add to Trip</button><button class="add-button" onclick="window.open('https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(plan.name + ' Navi Mumbai')}', '_blank')">Navigate</button></div></section>`;
+    root.classList.add('active');
+    if (typeof window.selectGem === 'function') window.selectGem(plan.id);
+  };
+  window.surpriseAgain = function() { surprisePlanIndex += 1; window.startSurpriseDiscovery(); };
+
   // Initialize Google Maps if key provided
   window.initGoogleMaps = function() {
     // 1. Index Page Map Initialization
