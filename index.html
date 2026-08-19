@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hidden India — Go where the stories are</title>
+  <meta name="description" content="Discover the India that lives between the landmarks — shaped by local hands, seasonal light, and generations of belonging.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Hidden India home">
+      <span class="brand-mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+      </span>
+      <span>hidden<span class="brand-accent">india</span></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="#explore" class="active">Explore</a>
+      <a href="discover.html">Discover Engine</a>
+      <a href="#stories">Stories</a>
+      <a href="dataset.html">Data Directory</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-button" aria-label="Saved places" onclick="showToast((JSON.parse(localStorage.getItem('hi_saved') || '[]').length) + ' saved places in your collection')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        <span class="saved-count"></span>
+      </button>
+      <button class="outline-button" onclick="openPrefsModal()">
+        Set your compass 
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+      <button class="mobile-menu" aria-label="Open menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="top">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="eyebrow-dot"></span> Travel beneath the surface</p>
+      <h1>Go where the<br><em>stories</em> are.</h1>
+      <p class="hero-text">Discover the India that lives between the landmarks — shaped by local hands, seasonal light, and generations of belonging.</p>
+      
+      <div class="search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input id="search-input" type="text" placeholder="Try ‘a quiet place near the Aravallis’" aria-label="Search places">
+        <button onclick="showToast('Searching hidden places...')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </div>
+      
+      <div class="hero-meta">
+        <span><span class="pulse"></span> Curated by local voices</span>
+        <span>•</span>
+        <span>Punjab · Rajasthan · Himachal</span>
+      </div>
+    </div>
+
+    <div class="hero-art">
+      <img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1100&q=85" alt="A winding road through golden desert hills">
+      <div class="hero-art-caption">
+        <span>THE UNFAMILIAR INDIA</span>
+        <strong>There is more to see.</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 01: Explore -->
+  <section class="explore-section" id="explore">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">01 / Find your way</p>
+        <h2>Start with a feeling.</h2>
+      </div>
+      <button class="text-link" onclick="openPrefsModal()">
+        Personalise your map 
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+    </div>
+
+    <div class="filter-row" role="group" aria-label="Place filters">
+      <button class="filter filter-btn active" data-filter="All places">All places</button>
+      <button class="filter filter-btn" data-filter="Nature">Nature</button>
+      <button class="filter filter-btn" data-filter="Heritage">Heritage</button>
+      <button class="filter filter-btn" data-filter="Food">Food</button>
+      <button class="filter filter-btn" data-filter="Crafts">Crafts</button>
+      <button class="filter distance" onclick="showToast('Filtering within 100 km radius')">
+        Within 100 km 
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+    </div>
+
+    <div class="explore-grid">
+      <!-- Interactive Map Card -->
+      <div class="map-card">
+        <div class="map-top">
+          <span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> 
+            Around Rajasthan & Aravallis
+          </span>
+          <span class="map-zoom">− &nbsp; +</span>
+        </div>
+        
+        <div class="map-surface" aria-label="Stylized map of destinations">
+          <div class="map-water"></div>
+          <div class="map-road road-one"></div>
+          <div class="map-road road-two"></div>
+          <div class="map-road road-three"></div>
+          <div class="map-label label-one">JODHPUR</div>
+          <div class="map-label label-two">RANAKPUR</div>
+          
+          <div class="user-pin" title="Your current location"><span></span></div>
+          
+          <button class="map-pin" data-id="1" style="left: 30%; top: 37%;" onclick="openPlaceModal(1)" aria-label="View Khejarli">
+            <span>1</span>
+          </button>
+          <button class="map-pin" data-id="2" style="left: 66%; top: 27%;" onclick="openPlaceModal(2)" aria-label="View Ranakpur Forest">
+            <span>2</span>
+          </button>
+          <button class="map-pin" data-id="3" style="left: 51%; top: 62%;" onclick="openPlaceModal(3)" aria-label="View Pipliyanagar">
+            <span>3</span>
+          </button>
+
+          <div class="map-radius"></div>
+        </div>
+
+        <div class="map-footer">
+          <span><span class="legend-dot saffron"></span> Your location</span>
+          <span><span class="legend-dot green"></span> Hidden places</span>
+          <button onclick="showToast('Map centred on your location')">
+            Recenter 
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Recommendations Sidebar Column -->
+      <aside class="recommendations">
+        <div class="recommendation-title">
+          <div>
+            <p class="eyebrow">Picked for you</p>
+            <h3>Worth the detour</h3>
+          </div>
+          <span class="ai-badge">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> AI
+          </span>
+        </div>
+
+        <div id="places-recommendations">
+          <article class="place-card" data-id="1" onclick="openPlaceModal(1)">
+            <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=900&q=85" alt="Khejarli">
+            <div class="place-card-content">
+              <div class="place-card-top">
+                <span class="place-type">Heritage</span>
+                <button class="save-btn" aria-label="Save Khejarli" onclick="event.stopPropagation(); window.toggleSave(1, 'Khejarli')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                </button>
+              </div>
+              <h4>Khejarli</h4>
+              <p>A quiet village where 363 Bishnoi people gave their lives to protect the khejri trees.</p>
+              <span class="distance-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> 28 km away
+              </span>
+            </div>
+          </article>
+
+          <article class="place-card" data-id="2" onclick="openPlaceModal(2)">
+            <img src="https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=900&q=85" alt="Ranakpur Forest">
+            <div class="place-card-content">
+              <div class="place-card-top">
+                <span class="place-type">Nature</span>
+                <button class="save-btn" aria-label="Save Ranakpur Forest" onclick="event.stopPropagation(); window.toggleSave(2, 'Ranakpur Forest')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                </button>
+              </div>
+              <h4>Ranakpur Forest</h4>
+              <p>A green corridor of leopard country, marble temples, and slow village roads.</p>
+              <span class="distance-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> 41 km away
+              </span>
+            </div>
+          </article>
+
+          <article class="place-card" data-id="3" onclick="openPlaceModal(3)">
+            <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=85" alt="Pipliyanagar">
+            <div class="place-card-content">
+              <div class="place-card-top">
+                <span class="place-type">Food</span>
+                <button class="save-btn" aria-label="Save Pipliyanagar" onclick="event.stopPropagation(); window.toggleSave(3, 'Pipliyanagar')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                </button>
+              </div>
+              <h4>Pipliyanagar</h4>
+              <p>Join a family kitchen for smoky bajra rotis and recipes passed down seven generations.</p>
+              <span class="distance-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> 62 km away
+              </span>
+            </div>
+          </article>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Section 02: Host Stories Band -->
+  <section class="story-band" id="stories">
+    <div>
+      <p class="eyebrow">02 / The why behind the where</p>
+      <h2>Not just places.<br><em>Perspectives.</em></h2>
+      <p>Every recommendation has a reason. We connect you to the people, rituals, and landscapes that make a place worth the journey — not just the photograph.</p>
+      <button class="dark-button" onclick="showToast('More stories and community perspectives coming soon')">
+        Read our approach 
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-mark">“</div>
+      <blockquote>Tourism should feel less like collecting places and more like being welcomed somewhere.</blockquote>
+      <div class="quote-author">
+        <div class="avatar">A</div>
+        <span>
+          <strong>Anamika Singh</strong>
+          <small>Community host · Kangra Valley</small>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 03: Interests & Trip Planner -->
+  <section class="lower-section" id="about">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">03 / Make it yours</p>
+        <h2>Build a softer itinerary.</h2>
+      </div>
+      <button class="text-link" onclick="openPrefsModal()">
+        What are you into? 
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+    </div>
+
+    <div class="interest-grid">
+      <button class="interest-card" onclick="showToast('Slow mornings added to your compass preferences')">
+        <span class="interest-image interest-1"></span>
+        <span>Slow mornings</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+      <button class="interest-card" onclick="showToast('Local kitchens added to your compass preferences')">
+        <span class="interest-image interest-2"></span>
+        <span>Local kitchens</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+      <button class="interest-card" onclick="showToast('Old stories added to your compass preferences')">
+        <span class="interest-image interest-3"></span>
+        <span>Old stories</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+      <button class="interest-card" onclick="showToast('Wild places added to your compass preferences')">
+        <span class="interest-image interest-4"></span>
+        <span>Wild places</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+    </div>
+
+    <div class="trip-panel">
+      <div>
+        <span class="trip-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        </span>
+        <div>
+          <p class="eyebrow">Your next chapter</p>
+          <h3 class="trip-count">A trip made around you</h3>
+          <p>Tell us what makes a good day, and we'll map the rest.</p>
+        </div>
+      </div>
+      <button class="outline-button" onclick="openPrefsModal()">
+        Find my places 
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- Modals -->
+  <div id="place-modal-backdrop" class="modal-backdrop" onclick="closePlaceModal()">
+    <div class="modal-body" onclick="event.stopPropagation()"></div>
+  </div>
+
+  <div id="prefs-modal-backdrop" class="modal-backdrop" onclick="closePrefsModal()">
+    <div class="prefs-modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closePrefsModal()" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <span class="trip-icon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+      </span>
+      <p class="eyebrow">Your compass</p>
+      <h2>What makes a good day?</h2>
+      <p>Choose a few signals and we'll tune your map to you.</p>
+      
+      <div class="preference-options">
+        <button class="pref-btn">
+          <span>Quiet & unhurried</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+        <button class="pref-btn">
+          <span>Eat something local</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+        <button class="pref-btn">
+          <span>Get lost in nature</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+        <button class="pref-btn">
+          <span>Meet the makers</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+      </div>
+
+      <button class="dark-button full" onclick="closePrefsModal(); showToast('Your compass is ready!');">
+        Show me the way 
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Element -->
+  <div id="toast" class="toast">
+    <span class="toast-msg"></span>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <a class="brand" href="#top">
+      <span class="brand-mark">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+      </span> 
+      hidden<span class="brand-accent">india</span>
+    </a>
+    <span>Go gently. Look closer.</span>
+    <span>© 2026 Hidden India · Standalone HTML/CSS Edition</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
