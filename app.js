@@ -1,10 +1,7 @@
 /**
  * Hidden India - Core Interactive JavaScript Engine
- * Google Maps API Integration Enabled
+ * Interactive destination explorer
  */
-
-// Google Maps API Key configured
-window.GOOGLE_MAPS_API_KEY = window.GOOGLE_MAPS_API_KEY || 'AIzaSyBejzCnhIMLLor9RhjP5c-HzOgmNaWHIqg';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Global Datasets with GPS Coordinates

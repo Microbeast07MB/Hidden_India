@@ -1381,6 +1381,29 @@ footer {
   background: repeating-linear-gradient(25deg, transparent 0 65px, #cbd4c9 66px 68px), repeating-linear-gradient(112deg, transparent 0 100px, #c9d1c7 101px 103px), #e4e7df;
 }
 
+.map-embed {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  z-index: 1;
+}
+
+.map-texture:has(.map-embed) {
+  background: #e4e7df;
+}
+
+.map-texture:has(.map-embed)::before,
+.map-texture:has(.map-embed)::after,
+.map-texture:has(.map-embed) > :not(.map-embed) {
+  display: none;
+}
+
+.map-workspace:has(.map-embed) .map-toolbar {
+  display: none;
+}
+
 .map-texture:before, .map-texture:after {
   content: '';
   position: absolute;
@@ -1511,6 +1534,7 @@ footer {
   color: #6d756f;
   font-size: 10px;
   box-shadow: 0 3px 15px #22382a18;
+  z-index: 2;
 }
 
 .map-toolbar span:first-child {
