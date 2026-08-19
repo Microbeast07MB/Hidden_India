@@ -396,6 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Index Page Map Initialization
     const indexMapEl = document.getElementById('google-map-index');
     if (indexMapEl && typeof google !== 'undefined' && google.maps) {
+      indexMapEl.innerHTML = '';
       const indexMap = new google.maps.Map(indexMapEl, {
         center: { lat: 25.6, lng: 73.4 },
         zoom: 8,
@@ -414,15 +415,15 @@ document.addEventListener('DOMContentLoaded', () => {
           title: p.name,
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
-            scale: 8,
+            scale: 10,
             fillColor: '#d65d31',
             fillOpacity: 1,
-            strokeWeight: 2,
+            strokeWeight: 2.5,
             strokeColor: '#ffffff'
           }
         });
         const infoWindow = new google.maps.InfoWindow({
-          content: `<div style="font-family:sans-serif; padding:4px;"><strong>${p.name}</strong><p style="margin:2px 0 0; font-size:12px;">${p.blurb}</p></div>`
+          content: `<div style="font-family:sans-serif; padding:6px;"><strong>${p.name}</strong><p style="margin:4px 0 0; font-size:12px; color:#555;">${p.blurb}</p></div>`
         });
         marker.addListener('click', () => {
           infoWindow.open(indexMap, marker);
@@ -434,6 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Discover Page Map Initialization
     const discoverMapEl = document.getElementById('google-map-discover');
     if (discoverMapEl && typeof google !== 'undefined' && google.maps) {
+      discoverMapEl.innerHTML = '';
       const discoverMap = new google.maps.Map(discoverMapEl, {
         center: { lat: 19.0330, lng: 73.0297 },
         zoom: 12,
@@ -451,10 +453,10 @@ document.addEventListener('DOMContentLoaded', () => {
           title: g.name,
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
-            scale: 9,
+            scale: 10,
             fillColor: '#397e50',
             fillOpacity: 1,
-            strokeWeight: 2,
+            strokeWeight: 2.5,
             strokeColor: '#ffffff'
           }
         });
@@ -465,13 +467,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Dynamically load Google Maps script if valid key present
-  if (window.GOOGLE_MAPS_API_KEY && window.GOOGLE_MAPS_API_KEY !== 'YOUR_GOOGLE_MAPS_API_KEY') {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${window.GOOGLE_MAPS_API_KEY}&callback=initGoogleMaps`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
+  // Run initGoogleMaps if Google API is loaded already
+  if (typeof google !== 'undefined' && google.maps) {
+    window.initGoogleMaps();
   }
 
   // Initialize
