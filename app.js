@@ -1,15 +1,21 @@
 /**
  * Hidden India - Core Interactive JavaScript Engine
+ * Google Maps API Integration Enabled
  */
 
+// Google Maps API Key configured
+window.GOOGLE_MAPS_API_KEY = window.GOOGLE_MAPS_API_KEY || 'AIzaSyBejzCnhIMLLor9RhjP5c-HzOgmNaWHIqg';
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Global Datasets
+  // Global Datasets with GPS Coordinates
   const places = [
     {
       id: 1,
       name: 'Khejarli',
       type: 'Heritage',
       distance: '28 km',
+      lat: 26.0465,
+      lng: 73.1517,
       image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=900&q=85',
       blurb: 'A quiet village where 363 Bishnoi people gave their lives to protect the khejri trees.',
       tags: ['Crafts', 'Heritage'],
@@ -21,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
       name: 'Ranakpur Forest',
       type: 'Nature',
       distance: '41 km',
+      lat: 25.1147,
+      lng: 73.4735,
       image: 'https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=900&q=85',
       blurb: 'A green corridor of leopard country, marble temples, and slow village roads.',
       tags: ['Nature', 'Wildlife'],
@@ -32,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
       name: 'Pipliyanagar',
       type: 'Food',
       distance: '62 km',
+      lat: 25.3216,
+      lng: 73.7431,
       image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=85',
       blurb: 'Join a family kitchen for smoky bajra rotis and recipes passed down seven generations.',
       tags: ['Food', 'Local life'],
@@ -46,6 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
       name: 'Flamingo Watch Point',
       type: 'Nature',
       distance: '6 km',
+      lat: 19.0315,
+      lng: 73.0185,
       score: 91,
       x: '18%',
       y: '38%',
@@ -63,6 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
       name: 'Kharghar Hills',
       type: 'Nature',
       distance: '14 km',
+      lat: 19.0473,
+      lng: 73.0699,
       score: 89,
       x: '36%',
       y: '18%',
@@ -80,6 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
       name: 'Belapur Fort',
       type: 'Heritage',
       distance: '12 km',
+      lat: 19.0191,
+      lng: 73.0378,
       score: 86,
       x: '58%',
       y: '26%',
@@ -97,6 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
       name: 'Shirvane Waterfall',
       type: 'Adventure',
       distance: '22 km',
+      lat: 19.0345,
+      lng: 73.0450,
       score: 84,
       x: '61%',
       y: '70%',
@@ -373,7 +391,91 @@ document.addEventListener('DOMContentLoaded', () => {
   window.toggleSave = toggleSave;
   window.toggleTrip = toggleTrip;
 
+  // Initialize Google Maps if key provided
+  window.initGoogleMaps = function() {
+    // 1. Index Page Map Initialization
+    const indexMapEl = document.getElementById('google-map-index');
+    if (indexMapEl && typeof google !== 'undefined' && google.maps) {
+      const indexMap = new google.maps.Map(indexMapEl, {
+        center: { lat: 25.6, lng: 73.4 },
+        zoom: 8,
+        styles: [
+          { elementType: "geometry", stylers: [{ color: "#f5f2eb" }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#523735" }] },
+          { featureType: "water", elementType: "geometry", stylers: [{ color: "#c9d6df" }] },
+          { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] }
+        ]
+      });
+
+      places.forEach(p => {
+        const marker = new google.maps.Marker({
+          position: { lat: p.lat, lng: p.lng },
+          map: indexMap,
+          title: p.name,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 8,
+            fillColor: '#d65d31',
+            fillOpacity: 1,
+            strokeWeight: 2,
+            strokeColor: '#ffffff'
+          }
+        });
+        const infoWindow = new google.maps.InfoWindow({
+          content: `<div style="font-family:sans-serif; padding:4px;"><strong>${p.name}</strong><p style="margin:2px 0 0; font-size:12px;">${p.blurb}</p></div>`
+        });
+        marker.addListener('click', () => {
+          infoWindow.open(indexMap, marker);
+          openPlaceModal(p.id);
+        });
+      });
+    }
+
+    // 2. Discover Page Map Initialization
+    const discoverMapEl = document.getElementById('google-map-discover');
+    if (discoverMapEl && typeof google !== 'undefined' && google.maps) {
+      const discoverMap = new google.maps.Map(discoverMapEl, {
+        center: { lat: 19.0330, lng: 73.0297 },
+        zoom: 12,
+        styles: [
+          { elementType: "geometry", stylers: [{ color: "#f5f2eb" }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#20241f" }] },
+          { featureType: "water", elementType: "geometry", stylers: [{ color: "#b9d2d2" }] }
+        ]
+      });
+
+      gems.forEach(g => {
+        const marker = new google.maps.Marker({
+          position: { lat: g.lat, lng: g.lng },
+          map: discoverMap,
+          title: g.name,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 9,
+            fillColor: '#397e50',
+            fillOpacity: 1,
+            strokeWeight: 2,
+            strokeColor: '#ffffff'
+          }
+        });
+        marker.addListener('click', () => {
+          selectGem(g.id);
+        });
+      });
+    }
+  };
+
+  // Dynamically load Google Maps script if valid key present
+  if (window.GOOGLE_MAPS_API_KEY && window.GOOGLE_MAPS_API_KEY !== 'YOUR_GOOGLE_MAPS_API_KEY') {
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${window.GOOGLE_MAPS_API_KEY}&callback=initGoogleMaps`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }
+
   // Initialize
   updateSavedCounters();
   renderPlaces();
 });
+
